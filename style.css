@@ -1,0 +1,19 @@
+@font-face {
+    font-family: sharetechRegular;
+    src: url(sharetech_regular.ttf);
+}
+body {
+    font-family: sharetechRegular;
+    text-align: center;
+}
+h1 {
+    font-size: 100px;
+}
+.load > img {
+    height: 40px;
+    width: auto;
+}
+
+.hide {
+    display: none;
+}
