@@ -14,7 +14,6 @@
   var title = document.querySelector('.title')
 
     // This function returns a promise that will resolve with an object of lat/lng coordinates
-
   function getCoordinatesForGeoLocation () {
     return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
@@ -33,26 +32,26 @@
     })
   }
 
+  // generic error handler
+  function handleErrors (response) {
+    if (!response.ok) {
+      throw Error(response.statusText)
+    }
+    return response
+  }
+
+// This function returns a promise that will resolve with a object of weather infos
   function getCurrentWeather (coordinates) {
     var url = `${CORS_PROXY}${DARKSKY_API_URL}${DARKSKY_API_KEY}/${coordinates.lat},${coordinates.lng}?units=si`
     return (
             window.fetch(url)
-                .then(response => response.json())
+                .then(handleErrors)
+                .then(response => response.json()).catch(function (error) {
+                  cityweather.innerHTML = error
+                }).then(() => loadGif.classList.add('hide'))
                 .then(data => data.currently)
     )
   }
-
-    //   cityForm.addEventListener('submit', function (event) {
-    //     loadGif.classList.remove('hide')
-    //     event.preventDefault() // prevent the form from submitting
-
-  getCoordinatesForGeoLocation()
-        .then(getCurrentWeather)
-        .then(weather => {
-          cityweather.innerHTML = 'temperature is currently ' + weather.temperature
-        })
-        .then(() => loadGif.classList.add('hide'))
-    //   })
 
   function newGmap (coordinates) {
     return new Promise((resolve, reject) => {
@@ -69,6 +68,12 @@
       })
     })
   }
+  getCoordinatesForGeoLocation()
+        .then(getCurrentWeather)
+        .then(weather => {
+          cityweather.innerHTML = 'temperature is currently ' + weather.temperature + '  °C'
+        })
+        .then(() => loadGif.classList.add('hide'))
 
   getCoordinatesForGeoLocation()
     .then(newGmap)
