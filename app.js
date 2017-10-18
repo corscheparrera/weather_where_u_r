@@ -32,33 +32,20 @@
     })
   }
 
-  // generic error handler
-  function handleErrors (response) {
-    if (!response.ok) {
-      throw Error(response.statusText)
-    }
-    return response
-  }
-
 // This function returns a promise that will resolve with a object of weather infos
   function getCurrentWeather (coordinates) {
     var url = `${CORS_PROXY}${DARKSKY_API_URL}${DARKSKY_API_KEY}/${coordinates.lat},${coordinates.lng}?units=si`
     return (
-            window.fetch(url)
-                .then(handleErrors)
-                .then(response => response.json()).catch(function (error) {
-                  cityweather.innerHTML = error
-                }).then(() => loadGif.classList.add('hide'))
-                .then(data => data.currently)
+      window.fetch(url)
+      .then(response => response.json())
+      .then(data => data.currently)
     )
   }
 
   function newGmap (coordinates) {
-    return new Promise((resolve, reject) => {
-      var latlng
-      latlng = new google.maps.LatLng(coordinates.lat, coordinates.lng)
-      resolve(latlng)
-    })
+    var latlng
+    latlng = new google.maps.LatLng(coordinates.lat, coordinates.lng)
+    return latlng
   }
 
   function cityInfos (latlng) {
